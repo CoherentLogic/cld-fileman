@@ -1,4 +1,6 @@
-DWPHP
+DWPHP ;CLD/JOLLIS-FileMan Web Tools PHP support ;8:03 AM  30 Aug 2011
+ ;;0.9;FileMan Web Tools;****;Aug 30, 2011
+ ;;$Id$
 
 ;
 ; ARRELEM will output an array element assignment

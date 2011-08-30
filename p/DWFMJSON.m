@@ -1,4 +1,6 @@
-DWFMJSON
+DWFMJSON ;CLD/JOLLIS-FileMan Web Tools JSON support ;8:04 AM  30 Aug 2011
+ ;;0.9;FileMan Web Tools;****;Aug 30, 2011
+ ;;$Id$
 
 GET(FILENUM,IEN)
  N FIELDS

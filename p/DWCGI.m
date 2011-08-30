@@ -1,4 +1,6 @@
-DWCGI
+DWCGI ;CLD/JOLLIS-FileMan Web Tools CGI support ;8:01 AM  30 Aug 2011
+ ;;0.9;FileMan Web Tools;****;Aug 30, 2011
+ ;;$Id$
  N DWQS,IEN,TP
  S QS=$ZTRNLNM("QUERY_STRING")
  F I=1:1:$L(QS,"&")  D
