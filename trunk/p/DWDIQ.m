@@ -1,4 +1,6 @@
-DWDIQ
+DWDIQ ;CLD/JOLLIS-FileMan Web Tools FM Query ;8:01 AM  30 Aug 2011
+ ;;0.9;FileMan Web Tools;****;Aug 30, 2011
+ ;;$Id$
 
 ;
 ; Retrieve the closed root of FILENUM
