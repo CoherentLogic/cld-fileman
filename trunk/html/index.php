@@ -9,15 +9,12 @@ include 'auth_check.inc';
    <title>FileMan</title>
    <link rel="stylesheet" type="text/css" href="fm.css">
    <script type="text/javascript" src="js/jquery.js"></script>
+   <script type="text/javascript" src="js/fileman.js"></script>
    <script type="text/javascript">
     $(document).ready(function() {
 	
 	$('[id="MasterFilesList"]').change(function() {
-	    var CurrentFile = $('#MasterFilesList').val();
-	    var URL = 'file.php?dd=' + escape(CurrentFile);
-	    $.get(URL, function(data) {
-		$('[id="ContentArea"]').html(data);
-	    });
+	    LoadFieldList();
 	});
     });
    </script>
@@ -27,6 +24,8 @@ include 'auth_check.inc';
 <div id="left_bar">
   <img src="images/fileman.png" style="padding:30px;">
   <?php include 'filelist.php'?>
+  <div id="field_list">
+  </div>
 </div>
 
 <div id="right_box">

@@ -78,4 +78,87 @@ class FileList
   }
 }
 
+class File
+{
+
+} /* class File */
+
+class FieldData
+{
+
+} /* class FieldData */
+
+class FieldMetadata
+{
+  protected $filenumber;
+  protected $fieldnumber;
+  protected $general;
+  protected $security_access;
+  protected $subfile;
+  protected $set_of_codes;
+
+  function __construct($connection, $filenumber, $fieldnumber)
+    {
+      $this->connection = $connection;
+      $this->connection->Connect();
+      $url = $connection->Bridge() . '?action=field-metadata';
+      $url = $url . '&instance=this&dd=' . $filenumber . '&field-number=' . $fieldnumber;
+      $code = Web($url);
+      eval($code);
+    }
+
+  function General()
+  {
+    return $this->general;
+  }
+
+  function SecurityAccess()
+  {
+    return $this->security_access;
+  }
+
+  function Subfile()
+  {
+    return $this->subfile;
+  }
+
+  function SetOfCodes()
+  {
+    return $this->set_of_codes;
+  }
+
+} /* class FieldMetadata */
+
+class Fields
+{
+  protected $fields;
+  protected $filenumber;
+
+  function __construct($connection, $filenumber)
+    {
+      $this->filenumber = $filenumber;
+      $this->connection = $connection;
+      $this->connection->Connect();
+      $url = $connection->Bridge() . '?action=field-list';
+      $url = $url . '&instance=this&dd=' . $filenumber;
+      $code = Web($url);
+      eval($code);
+    }
+
+  function Lookup($fieldnumber)
+  {
+    return $this->fields[$fieldnumber];
+  }
+
+  function FileNumber()
+  {
+    return $this->filenumber;
+  }
+
+  function Fields()
+  {
+    return $this->fields;
+  }
+
+} /* class AllFields */
 ?>
