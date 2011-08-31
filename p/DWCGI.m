@@ -10,6 +10,7 @@ DWCGI ;CLD/JOLLIS-FileMan Web Tools CGI support ;8:01 AM  30 Aug 2011
  I DWQS("action")="get-field" D GETFIELD
  I DWQS("action")="set-field" D SETFIELD
  I DWQS("action")="field-list" D FLDLIST
+ I DWQS("action")="field-metadata" D FLDMETA(DWQS("dd"),DWQS("field-number"),DWQS("instance"))
  I DWQS("action")="file-numbers" D FILENUMS(DWQS("instance"))
  I DWQS("action")="authenticate" D AUTH(DWQS("session_id"),DWQS("access_code"))
  Q
@@ -37,6 +38,9 @@ GETFIELD
 SETFIELD
  W !
  Q
+
+FLDMETA(DDNUM,FLDNUM,INSTANCE)
+ 
 
 FILENUMS(INSTANCE) 
  N FILES S FILES=""
