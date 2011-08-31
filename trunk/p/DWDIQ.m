@@ -125,3 +125,75 @@ FILELIST(TARGET)
  ..S TARGET(CNT,"NAME")=$P(^DIC(FNUM,0),"^",1)
  ..S TARGET(CNT,"DDNUM")=$P(^DIC(FNUM,0),"^",2)+0
  Q CNT
+
+;
+; DATATYPE returns a string describing the type of 
+; FLDNUM in FILENUM.
+;
+DATATYPE(FILENUM,FLDNUM)
+ N T S T=""
+ N RAW S RAW=$$FLDTYPE(FILENUM,FLDNUM)
+ I RAW["B" S T="Boolean"
+ I RAW["D" S T="Date Valued"
+ I RAW["F" S T="Free Text"
+ I RAW["K" S T="MUMPS Code"
+ I RAW["N" S T="Numeric Valued"
+ I RAW["P" S T="Pointer"
+ I RAW["S" S T="Set of Codes"
+ I RAW["V" S T="Variable Pointer"
+ I RAW["W" S T="Word Processing"
+ I $$SUBFILE(FILENUM,FLDNUM)'=0 S T="Multiple"
+ Q T
+
+;
+; FLDAUDIT returns one of the following audit characteristics for FLDNUM in FILENUM:
+;  Never
+;  Always
+;  Edit/Delete Only
+; 
+FLDAUDIT(FILENUM,FLDNUM)
+ N RAW S RAW="Never"
+ N TYP S TYP=$$FLDTYPE(FILENUM,FLDNUM)
+ I TYP["a" S RAW="Always"
+ I TYP["e" S RAW="Edit/Delete Only"
+ Q RAW
+
+;
+; FLDREQD returns "Yes" or "No", depending on whether data entry
+; for FLDNUM in FILENUM is required.
+; 
+FLDREQD(FILENUM,FLDNUM)
+ N RAW S RAW="No"
+ N TYP S TYP=$$FLDTYPE(FILENUM,FLDNUM)
+ I TYP["R" S RAW="Yes"
+ Q RAW
+
+;
+; IMUTABLE returns "Yes" or "No", depending on whether
+; FLDNUM in FILENUM is immutable.
+;
+IMUTABLE(FILENUM,FLDNUM)
+ N RAW S RAW="No"
+ N TYP S TYP=$$FLDTYPE(FILENUM,FLDNUM)
+ I TYP["I" S RAW="Yes"
+ Q RAW
+
+
+;
+; COMPUTED returns "Yes" if FLDNUM in FILENUM
+; is a computed field.
+;
+COMPUTED(FILENUM,FLDNUM)
+ N RAW S RAW="No"
+ N TYP S TYP=$$FLDTYPE(FILENUM,FLDNUM)
+ I TYP["C" S RAW="Yes"
+ Q RAW
+
+;
+; HELPMSG returns the short help message for 
+; FILENUM, FLDNUM
+;
+HELPMSG(FILENUM,FLDNUM)
+ Q ^DD(FILENUM,FLDNUM,3)
+
+ 
