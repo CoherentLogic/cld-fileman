@@ -41,9 +41,12 @@ body {
     float:left;
 }
 
+#FilesBox {
+    margin-left:30px;
+}
+
 #MasterFilesList {
     width:280px;
-    margin-left:30px;
 }
 
 #right_box {
@@ -67,6 +70,9 @@ select {
 #field_list {
     margin-top:30px;
     margin-left:30px;
+    height:50%;
+    width:280px;
+    overflow:auto;
 }
 
 #field_list td {
@@ -88,5 +94,32 @@ a:hover {
 
 a:visited {
     color:black;
+}
+
+#FieldHeader {
+    font-size:24px;
+}
+
+#FieldInformation {
+    border:1px solid #2957a2;
+    width:auto;
+    min-width:840px;
+    margin:20px;
+    padding:10px;
+    height:auto;
+    min-height:300px;
+    font-weight:lighter;
+}
+
+#FieldInformation a {
+    font-size:12px;
+}
+
+#FieldInformation td {
+    font-size:12px;
+}
+
+.BodyWrapper {
+    padding:10px;
 }
 
