@@ -178,7 +178,6 @@ IMUTABLE(FILENUM,FLDNUM)
  I TYP["I" S RAW="Yes"
  Q RAW
 
-
 ;
 ; COMPUTED returns "Yes" if FLDNUM in FILENUM
 ; is a computed field.
@@ -194,6 +193,29 @@ COMPUTED(FILENUM,FLDNUM)
 ; FILENUM, FLDNUM
 ;
 HELPMSG(FILENUM,FLDNUM)
- Q ^DD(FILENUM,FLDNUM,3)
+ Q $G(^DD(FILENUM,FLDNUM,3))
 
- 
+;
+; PRTLEN returns the print length for FLDNUM in FILENUM,
+; if it is defined.
+;
+PRTLEN(FILENUM,FLDNUM)
+ N RAW S RAW=$$FLDTYPE(FILENUM,FLDNUM)
+ N PLEN S PLEN="Undefined"
+ I RAW["J" S PLEN=$P(RAW,"J",2)+0
+ Q PLEN
+
+;
+; FLDSEC returns the read, write, and delete access 
+; for FLDNUM in FILENUM in TARGET, which must be
+; passed by reference.
+;
+FLDSEC(FILENUM,FLDNUM,TARGET)
+ N RA,DA,WA S RA="Undefined" S DA="Undefined" S WA="Undefined"
+ S RA=$G(^DD(FILENUM,FLDNUM,8))
+ S DA=$G(^DD(FILENUM,FLDNUM,8.5))
+ S WA=$G(^DD(FILENUM,FLDNUM,9))
+ S TARGET("READ")=RA
+ S TARGET("DELETE")=DA
+ S TARGET("WRITE")=WA
+ Q

@@ -9,7 +9,7 @@ DWCGI ;CLD/JOLLIS-FileMan Web Tools CGI support ;8:01 AM  30 Aug 2011
  I DWQS("action")="get-json-record" D JSON
  I DWQS("action")="get-field" D GETFIELD
  I DWQS("action")="set-field" D SETFIELD
- I DWQS("action")="field-list" D FLDLIST
+ I DWQS("action")="field-list" D FLDLIST(DWQS("dd"),DWQS("instance"))
  I DWQS("action")="field-metadata" D FLDMETA(DWQS("dd"),DWQS("field-number"),DWQS("instance"))
  I DWQS("action")="file-numbers" D FILENUMS(DWQS("instance"))
  I DWQS("action")="authenticate" D AUTH(DWQS("session_id"),DWQS("access_code"))
@@ -27,8 +27,14 @@ AUTH(SESSID,ACCODE)
  W OK
  Q
 
-FLDLIST
+FLDLIST(DDNUM,INSTANCE)
+ ; output a list of fields
+ N FN S FN=INSTANCE_"->fields"
  N FL,CNT
+ S CNT=$$FLDNUMS^DWDIQ(DDNUM,.FN)
+ D HEADER("text/plain")
+ F I=1:1:CNT D
+ .D ARRELEM^DWPHP(FN,FN(I),$$FLDNAME^DWDIQ(DDNUM,FN(I)))
  Q
 
 GETFIELD
@@ -40,7 +46,39 @@ SETFIELD
  Q
 
 FLDMETA(DDNUM,FLDNUM,INSTANCE)
- 
+ ; output general metadata 
+ N GEN S GEN=INSTANCE_"->general"
+ N SEC S SEC=INSTANCE_"->security_access"
+ N SUB S SUB=INSTANCE_"->subfile"
+ N PTR S PTR=INSTANCE_"->pointer"
+ N SOC S SOC=INSTANCE_"->set_of_codes"
+ N WP S WP=INSTANCE_"->word_processing"
+ N SARR S SARR=""
+ D HEADER("text/plain")
+ D ARRELEM^DWPHP(GEN,"number",FLDNUM)
+ D ARRELEM^DWPHP(GEN,"name",$$FLDNAME^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"datatype",$$DATATYPE^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"auditing",$$FLDAUDIT^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"required",$$FLDREQD^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"immutable",$$IMUTABLE^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"computed",$$COMPUTED^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"helptext",$$HELPMSG^DWDIQ(DDNUM,FLDNUM))
+ D ARRELEM^DWPHP(GEN,"printlength",$$PRTLEN^DWDIQ(DDNUM,FLDNUM))
+ ; output security metadata
+ D FLDSEC^DWDIQ(DDNUM,FLDNUM,.SARR)
+ D ARRELEM^DWPHP(SEC,"read",SARR("READ"))
+ D ARRELEM^DWPHP(SEC,"write",SARR("WRITE"))
+ D ARRELEM^DWPHP(SEC,"delete",SARR("DELETE"))
+ ; output subfile metadata
+ I $$SUBFILE^DWDIQ(DDNUM,FLDNUM)'=0 D
+ .N VER,ASK,TMP S ASK="No" S VER="No"
+ .S TMP=$$FLDTYPE^DWDIQ(DDNUM,FLDNUM)
+ .I TMP["A" S VER="Yes" E  S VER="No"
+ .D ARRELEM^DWPHP(SUB,"number",$$SUBFILE^DWDIQ(DDNUM,FLDNUM))
+ .D ARRELEM^DWPHP(SUB,"verify-new-subentry",VER)
+ .I TMP["M" S ASK="Yes" E  S ASK="No"
+ .D ARRELEM^DWPHP(SUB,"ask-for-another",ASK)
+ Q
 
 FILENUMS(INSTANCE) 
  N FILES S FILES=""
