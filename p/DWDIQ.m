@@ -127,6 +127,12 @@ FILELIST(TARGET)
  Q CNT
 
 ;
+; FILENAME returns the name of FILENUM
+;
+FILENAME(FILENUM)
+ Q $P($G(^DIC(FILENUM,0)),"^",1)
+
+;
 ; DATATYPE returns a string describing the type of 
 ; FLDNUM in FILENUM.
 ;
@@ -219,3 +225,20 @@ FLDSEC(FILENUM,FLDNUM,TARGET)
  S TARGET("DELETE")=DA
  S TARGET("WRITE")=WA
  Q
+
+;
+; CODES returns an array (TARGET) of key-value pairs for the set of codes
+; defined by FLDNUM in FILENUM. CODES itself returns the number of 
+; key-value pairs.
+;
+CODES(FILENUM,FLDNUM,TARGET)
+ N CS S CS=$P($G(^DD(FILENUM,FLDNUM,0)),"^",3)
+ N CNT S CNT=$L(CS,";")-1
+ N CC,KEY,VAL
+ F I=1:1:CNT D
+ .S CC=$P(CS,";",I)   ;one pair
+ .S KEY=$P(CC,":",1)  ;key of pair
+ .S VAL=$P(CC,":",2)  ;value of pair
+ .S TARGET(KEY)=VAL
+ Q CNT
+ 

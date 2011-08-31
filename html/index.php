@@ -11,11 +11,8 @@ include 'auth_check.inc';
    <script type="text/javascript" src="js/jquery.js"></script>
    <script type="text/javascript" src="js/fileman.js"></script>
    <script type="text/javascript">
-    $(document).ready(function() {
-	
-	$('[id="MasterFilesList"]').change(function() {
-	    LoadFieldList();
-	});
+    $(document).ready(function() {       
+       	LoadFieldsFromSelection();
     });
    </script>
 </head>
