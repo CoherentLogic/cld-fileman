@@ -82,7 +82,13 @@ FLDMETA(DDNUM,FLDNUM,INSTANCE)
  .D ARRELEM^DWPHP(SUB,"verify-new-subentry",VER)
  .I TMP["M" S ASK="Yes" E  S ASK="No"
  .D ARRELEM^DWPHP(SUB,"ask-for-another",ASK)
- ; TODO: output pointer metadata
+ ; output pointer metadata
+ I $$FLDTYPE^DWDIQ(DDNUM,FLDNUM)["P" D
+ .N LG,PN
+ .S PN=$$POINTER^DWDIQ(DDNUM,FLDNUM,.LG)
+ .D ARRELEM^DWPHP(PTR,"file-number",PN)
+ .D ARRELEM^DWPHP(PTR,"laygo-allowed",LG)
+ .D ARRELEM^DWPHP(PTR,"file-name",$$FILENAME^DWDIQ(PN))
  ; output set-of-codes metadata
  I $$FLDTYPE^DWDIQ(DDNUM,FLDNUM)["S" D
  .S CODECNT=$$CODES^DWDIQ(DDNUM,FLDNUM,.CODESET)
@@ -96,8 +102,7 @@ FILENUMS(INSTANCE)
  D HEADER("text/plain")
  F I=1:1:CNT D
  .D ARRELEM^DWPHP(INSTANCE_"->files",FILES(I,"DDNUM"),FILES(I,"NAME"))
- Q
- 
+ Q 
 
 JSON
  D HEADER("application/json")
