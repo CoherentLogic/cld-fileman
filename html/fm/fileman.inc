@@ -96,6 +96,7 @@ class FieldMetadata
   protected $security_access;
   protected $subfile;
   protected $set_of_codes;
+  protected $pointer;
 
   function __construct($connection, $filenumber, $fieldnumber)
     {
@@ -125,6 +126,11 @@ class FieldMetadata
   function SetOfCodes()
   {
     return $this->set_of_codes;
+  }
+
+  function Pointer()
+  {
+    return $this->pointer;
   }
 
 } /* class FieldMetadata */

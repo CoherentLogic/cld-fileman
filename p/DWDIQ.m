@@ -109,6 +109,24 @@ SUBFILE(FILENUM,FLDNUM)
  Q $$FLDTYPE(FILENUM,FLDNUM)+0
 
 ;
+; POINTER returns the DD number of the file pointed to
+; in FLDNUM of FILENUM. Note that this does NOT apply
+; to Variable-Pointer fields. See VPOINTER^DWDIQ for
+; use with Variable-Pointer fields. 
+; 
+; The LAYGO argument must be passed by reference, and
+; will be set to "Yes" or "No", depending on whether
+; or not LAYGO is allowed for the pointed-to file
+;
+POINTER(FILENUM,FLDNUM,LAYGO)
+ N LG S LG="Yes"
+ N RAW S RAW=$$FLDTYPE(FILENUM,FLDNUM)
+ I $L(RAW,"'")>1 S LG="No"
+ S LAYGO=LG
+ Q $P(RAW,"P",2)+0 
+ 
+
+;
 ; FILELIST returns a sequentially-indexed array containing
 ; NAME and DDNUM subscripts for all files in this installation
 ; in TARGET. TARGET must be passed by reference; not by value.
