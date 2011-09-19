@@ -13,3 +13,15 @@ ARRELEM(VARNAME,KEY,VALUE)
  S STR="$"_VARNAME_"['"_KEY_"']='"_VALUE_"';"
  W STR,!
  Q
+
+;
+; VARASGN will output a variable assignment statement
+; assigning $VARNAME='VALUE'
+;
+VARASGN(VARNAME,VALUE)
+ N STR S STR=""
+ S DIRULE(1,"'")="%27"
+ S VALUE=$$TRANSL8^DILF(VALUE,.DIRULE)
+ S STR="$"_VARNAME_"='"_VALUE_"';"
+ W STR,!
+ Q
