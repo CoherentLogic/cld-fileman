@@ -7,13 +7,16 @@ DWCGI ;CLD/JOLLIS-FileMan Web Tools CGI support ;8:01 AM  30 Aug 2011
  .S TP=$P(QS,"&",I)
  .S DWQS($P(TP,"=",1))=$P(TP,"=",2)
  I DWQS("action")="get-json-record" D JSON
- I DWQS("action")="get-field" D GETFIELD
+ I DWQS("action")="get-field" D GETFIELD(DWQS("dd"),DWQS("field-number"),DWQS("ien"),DWQS("variable"))
  I DWQS("action")="set-field" D SETFIELD
+ I DWQS("action")="get-entry" D GETENTR(DWQS("dd"),DWQS("ien"))
+ I DWQS("action")="entry-list" D ENTRLIST(DWQS("dd"),DWQS("instance"))
  I DWQS("action")="field-list" D FLDLIST(DWQS("dd"),DWQS("instance"))
  I DWQS("action")="field-metadata" D FLDMETA(DWQS("dd"),DWQS("field-number"),DWQS("instance"))
  I DWQS("action")="file-numbers" D FILENUMS(DWQS("instance"))
  I DWQS("action")="authenticate" D AUTH(DWQS("session_id"),DWQS("access_code"))
  Q
+
 
 AUTH(SESSID,ACCODE)
  N OK S OK=0
@@ -27,6 +30,23 @@ AUTH(SESSID,ACCODE)
  W OK
  Q
 
+ENTRLIST(DDNUM,INSTANCE)
+ N FN S FN=INSTANCE_"->entries"
+ N IENA,CNT,ENTRNAME S CNT=$$ALLIENS^DWDIQ(DDNUM,.IENA)
+ D HEADER("text/plain")
+ F I=1:1:CNT D
+ .D ARRELEM^DWPHP(FN,IENA(I),$$ENTRNAME^DWDIQ(DDNUM,IENA(I)))
+ Q
+
+GETENTR(DDNUM,IEN)
+ N VARNAME S VARNAME="this->fields"
+ N IENS S IENS=IEN_","
+ N CNT,FLDNUMS S CNT=$$FLDNUMS^DWDIQ(DDNUM,.FLDNUMS)
+ D HEADER("text/plain")
+ F I=1:1:CNT D
+ .D ARRELEM^DWPHP(VARNAME,FLDNUMS(I),$$GET1^DIQ(DDNUM,IENS,FLDNUMS(I)))
+ Q
+
 FLDLIST(DDNUM,INSTANCE)
  ; output a list of fields
  N FN S FN=INSTANCE_"->fields"
@@ -37,8 +57,15 @@ FLDLIST(DDNUM,INSTANCE)
  .D ARRELEM^DWPHP(FN,FN(I),$$FLDNAME^DWDIQ(DDNUM,FN(I)))
  Q
 
-GETFIELD
- W !
+GETFIELD(DDNUM,FLDNUM,IEN,VARNAME)
+ N FV S FV=""
+ N IENS S IENS=IEN_","
+ I $$DATATYPE^DWDIQ(DDNUM,FLDNUM)'="Word Processing" D
+ .S FV=$$GET1^DIQ(DDNUM,IENS,FLDNUM)
+ .D HEADER("text/plain")
+ .D VARASGN^DWPHP("this->"_VARNAME,FV)
+ I $$DATATYPE^DWDIQ(DDNUM,FLDNUM)="Word Processing" D
+ .W "POOP",!
  Q
 
 SETFIELD

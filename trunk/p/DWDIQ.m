@@ -3,7 +3,7 @@ DWDIQ ;CLD/JOLLIS-FileMan Web Tools FM Query ;8:01 AM  30 Aug 2011
  ;;$Id$
 
 ;
-; Retrieve the closed root of FILENUM
+; Retrieve the closed root of FILENUM.
 ;
 ROOT(FILENUM)
  N OPNGBL,OGLEN,CLSGBL
@@ -21,6 +21,15 @@ HEADER(FILENUM)
  N OPNGBL
  S OPNGBL=$G(^DIC(FILENUM,0,"GL"))
  Q OPNGBL_"0)"
+
+;
+; ISSUB returns 1 if FILENUM is a subfile, otherwise
+; returns 0.
+; 
+ISSUB(FILENUM)
+ N RETVAL S RETVAL=0
+ I $G(^DIC(FILENUM,0,"GL"))="" S RETVAL=1
+ Q RETVAL
 
 ;
 ; Retrieve the total number of entries in FILENUM
@@ -52,7 +61,14 @@ ALLIENS(FILENUM,TARGET)
  S REF=$$ROOT(FILENUM)
  F I=0:1 S ENT=$O(@REF@(ENT)) Q:I>$$ENTRIES(FILENUM)  D
  .S TARGET(I)=ENT
- Q I 
+ Q $$ENTRIES(FILENUM)
+
+;
+; Retrieve the name of entry IEN in FILENUM
+;
+ENTRNAME(FILENUM,IEN)
+ N IENS S IENS=IEN_","
+ Q $$GET1^DIQ(FILENUM,IENS,.01)
 
 ;
 ; Retrieve the name of FLDNUM in FILENUM
